@@ -78,8 +78,21 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1 style="color: #28A745;" >Форма</h1>
+  
+     <div class="container">
+   
+   <h4>Calorie Goal</h4>
+   <br>
+   <div class="row">
+       <div class="col-md-3 ml-auto">
+           <div class="progress">
+               <div class="progress-bar bg-success" role="progressbar" style="width: 50%" aria-valuenow="0" aria_valuemin='0' aria_valuemax='0'></div>
+           </div>
+       </div>
+   </div>
+   
+ 
+        <h1 style="color: #28A745;" >Macro nutrients &amp; Calorie Tracker</h1>
         <form method="POST">
            {% csrf_token %}
             <div class="form-group">
@@ -96,23 +109,23 @@
  
     </div>
     
-    <section class="intro">
-  <div class="bg-image h-100" style="background-color: #343A40;">
-    <div class="mask d-flex align-items-center h-100">
+<section class="intro">
+  <div class="bg-image" style="background-color: #343A40;">
+    <div class="mask d-flex align-items-center">
       <div class="container">
         <div class="row justify-content-center">
-          <div class="col-12">
-            <div class="card shadow-2-strong">
+          <div class="col-lg-12">
+            <div class="card shadow-2-strong" style="border-color: #28A745;">
               <div class="card-body p-0">
-                <div class="table-responsive table-scroll" data-mdb-perfect-scrollbar="true" style="position: relative; height: 700px">
-                  <table class="table table-dark mb-0">
+                <div class="table-responsive">
+                  <table class="table table-dark mb-0" id="table">
                     <thead style="background-color: #393939;">
                       <tr class="text-uppercase text-success">
                         <th scope="col">Product name</th>
-                        <th scope="col">Curbs</th>
-                        <th scope="col">Protein</th>
-                        <th scope="col">Fats</th>
-                        <th scope="col">Calories</th>
+                        <th scope="col">Curbs (gm)</th>
+                        <th scope="col">Protein (gm)</th>
+                        <th scope="col">Fats (gm)</th>
+                        <th scope="col">Calories (Kcal)</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -125,6 +138,16 @@
                         <td>{{c.food_consumed.calories}}</td>
                       </tr>
                     {% endfor %}
+                    
+                        <tr>
+                            <td id="name"><b>Total</b></td>
+                            <td id="totalCarbs"><b></b></td>
+                            <td id="totalProtein"><b></b></td>
+                            <td id="totalFats"><b></b></td>
+                            <td id="totalCalorie"><b></b></td>
+
+                            
+                        </tr>
                     </tbody>
                   </table>
                 </div>
@@ -136,6 +159,35 @@
     </div>
   </div>
 </section>
-    
+
 </body>
+
+<script>
+   
+    var table = document.getElementById("table");
+    var carbs = 0, protein = 0, fats = 0, calories = 0;
+    
+    for(var i=1;i<table.rows.length-1;i++){
+        console.log(table.rows[i].cells[1].innerHTML);
+        carbs += parseFloat(table.rows[i].cells[1].innerHTML);
+        protein +=  parseFloat(table.rows[i].cells[2].innerHTML);
+        fats +=  parseFloat(table.rows[i].cells[3].innerHTML)
+        calories +=  parseFloat(table.rows[i].cells[4].innerHTML)
+    }
+
+    document.getElementById("totalCarbs").innerHTML = '<b>' + carbs.toFixed(2)+'(gm)</b>';
+    document.getElementById("totalProtein").innerHTML = '<b>' + protein.toFixed(2)+'(gm)</b>';
+    document.getElementById("totalFats").innerHTML = '<b>' + fats.toFixed(2)+'(gm)</b>';
+    document.getElementById("totalCalorie").innerHTML = '<b>' + calories+'(kCal)</b>';
+
+    var calPer = (calories/2000)*100;
+    document.getElementsByClassName("progress-bar")[0].setAttribute("style", "width:"+calPer+"%");
+
+
+    
+    
+    
+</script>
+    
+
 </html>
